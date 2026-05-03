@@ -42,7 +42,6 @@
 
         p { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; margin-top: 20px; color: var(--accent); }
 
-        /* Cursor initialized off-screen */
         .cursor {
             position: fixed; 
             width: 40px; 
@@ -62,6 +61,45 @@
             display: flex; justify-content: space-between; padding: 0 50px;
             z-index: 100; font-family: 'Syncopate'; font-size: 10px; letter-spacing: 2px;
         }
+
+        /* --- BUTTON SYSTEM --- */
+        .btn-panel {
+            position: fixed;
+            bottom: 40px;
+            z-index: 1000;
+            display: flex;
+            gap: 15px;
+            pointer-events: auto;
+        }
+
+        .panel-left { left: 40px; }
+        .panel-right { right: 40px; }
+
+        .nexus-btn {
+            padding: 15px 25px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            color: white;
+            font-family: 'Syncopate';
+            font-size: 9px;
+            letter-spacing: 2px;
+            text-decoration: none;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        
+        .nexus-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(0, 255, 204, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .donate-highlight {
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
     </style>
 </head>
 <body>
@@ -69,16 +107,28 @@
     <div class="cursor" id="cursor"></div>
     
     <nav>
-        <div>My Cool Website With Cool Animations</div>
+        <div>MY COOL WEBSITE WITH COOL ANIMATIONS</div>
         <div>Scroll Down</div>
     </nav>
+
+    <!-- LEFT PANEL: YOUR SITES -->
+    <div class="btn-panel panel-left">
+        <a href="https://blav.live" target="_blank" class="nexus-btn hover-trigger">blav.live</a>
+        <a href="https://blav.site" target="_blank" class="nexus-btn hover-trigger">blav.site</a>
+        <a href="https://blav.store" target="_blank" class="nexus-btn hover-trigger">blav.store</a>
+    </div>
+
+    <!-- RIGHT PANEL: KO-FI -->
+    <div class="btn-panel panel-right">
+        <a href="https://ko-fi.com/vaporblav" target="_blank" class="nexus-btn donate-highlight hover-trigger">Support Project</a>
+    </div>
 
     <div id="canvas-container"></div>
 
     <div id="viewport">
         <section>
             <div class="content">
-                <p>Cool Side Project That I Have Been Working On</p>
+                <p>Cool Project That I Have Been Working On</p>
                 <h2 class="title">Hey My Name Is Blav<br>Whats up!</h2>
             </div>
         </section>
@@ -163,7 +213,6 @@
         let mouseMoved = false;
 
         window.addEventListener('mousemove', (e) => {
-            // Only show cursor on first move to prevent corner-loading
             if (!mouseMoved) {
                 gsap.set(cursor, { opacity: 1 });
                 mouseMoved = true;
@@ -181,6 +230,16 @@
             const x = (e.clientX / window.innerWidth - 0.5) * 0.5;
             const y = (e.clientY / window.innerHeight - 0.5) * 0.5;
             gsap.to(plane.rotation, { y: x, x: -0.5 + y, duration: 1 });
+        });
+
+        // Hover effects for all buttons
+        document.querySelectorAll('.hover-trigger').forEach(btn => {
+            btn.addEventListener('mouseenter', () => {
+                gsap.to(cursor, { scale: 1.8, borderColor: '#00ffcc', duration: 0.3 });
+            });
+            btn.addEventListener('mouseleave', () => {
+                gsap.to(cursor, { scale: 1, borderColor: 'white', duration: 0.3 });
+            });
         });
 
         /** ANIMATION **/
